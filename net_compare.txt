@@ -1,0 +1,55 @@
+PyTorch:
+
+Net(
+  (conv1): Conv2d (1, 10, kernel_size=(5, 5), stride=(1, 1))
+  (conv2): Conv2d (10, 20, kernel_size=(5, 5), stride=(1, 1))
+  (conv2_drop): Dropout2d(p=0.5)
+  (fc1): Linear(in_features=320, out_features=50)
+  (fc2): Linear(in_features=50, out_features=10)
+  (localization): Sequential(
+    (0): Conv2d (1, 8, kernel_size=(7, 7), stride=(1, 1))
+    (1): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), dilation=(1, 1))
+    (2): ReLU(inplace)
+    (3): Conv2d (8, 10, kernel_size=(5, 5), stride=(1, 1))
+    (4): MaxPool2d(kernel_size=(2, 2), stride=(2, 2), dilation=(1, 1))
+    (5): ReLU(inplace)
+  )
+  (fc_loc): Sequential(
+    (0): Linear(in_features=90, out_features=32)
+    (1): ReLU(inplace)
+    (2): Linear(in_features=32, out_features=6)
+  )
+)
+
+MxNet: 
+
+net: Net(
+  (model): HybridSequential(
+    (0): STN(
+      (fc_loc): HybridSequential(
+        (0): Dense(None -> 32, Activation(relu))
+        (1): Dense(None -> 6, linear)
+      )
+      (localization): HybridSequential(
+        (0): Conv2D(None -> 8, kernel_size=(7, 7), stride=(1, 1))
+        (1): MaxPool2D(size=(2, 2), stride=(2, 2), padding=(0, 0), ceil_mode=False)
+        (2): Activation(relu)
+        (3): Conv2D(None -> 10, kernel_size=(5, 5), stride=(1, 1))
+        (4): MaxPool2D(size=(2, 2), stride=(2, 2), padding=(0, 0), ceil_mode=False)
+        (5): Activation(relu)
+      )
+    )
+    (1): Conv2D(None -> 10, kernel_size=(5, 5), stride=(1, 1))
+    (2): MaxPool2D(size=(2, 2), stride=(2, 2), padding=(0, 0), ceil_mode=False)
+    (3): Activation(relu)
+    (4): Conv2D(None -> 20, kernel_size=(5, 5), stride=(1, 1))
+    (5): Dropout(p = 0.5)
+    (6): MaxPool2D(size=(2, 2), stride=(2, 2), padding=(0, 0), ceil_mode=False)
+    (7): Activation(relu)
+    (8): Flatten
+    (9): Dense(None -> 50, linear)
+    (10): Activation(relu)
+    (11): Dropout(p = 0.5)
+    (12): Dense(None -> 10, linear)
+  )
+)
