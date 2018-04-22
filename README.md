@@ -9,8 +9,10 @@
 &emsp;&emsp;Spatial Transformer Networks （以下均简称STN）提供了一种可微分的网络结构，不需要关键点的标定，能够根据分类或者其它任务自适应地将数据进行空间变换和对齐（包括平移、缩放、旋转以及其它几何变换等）。  
 <p align="center"> 
 <img src="https://github.com/Feywell/STN_gluon/raw/master/mnist.png">
-</p>
-&emsp;&emsp;上述图片是将STN作为MNIST分类网络第一层的结果，我们注意到STN学会了如何更“健壮”地进行图像分类：通过放大和消除背景噪声，它已经“标准化”输入数据以提高分类效果。详细动画[here](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)  
+</p>  
+&emsp;&emsp;上述图片是将STN作为MNIST分类网络第一层的结果，我们注意到STN学会了如何更“健壮”地进行图像分类：通过放大和消除背景噪声，它已经“标准化”输入数据以提高分类效果。  
+
+&emsp;&emsp;详细动画[here](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)  
 
 ----------  
 ## 网络结构 
@@ -27,10 +29,10 @@
 &emsp;&emsp;如上图所示，STN由Localisation net （定位网络），Grid generator（网格生成器）和Sampler（采样器）三部分构成。    
 
 #### 2.1 Localisation Net
-&emsp;&emsp;Localisation 网络的目标是学习空间变换参数$θ$,无论通过全连接层，还是卷积层，Localisation网络最后一层必须回归产生空间变换参数$θ$。
+&emsp;&emsp;Localisation 网络的目标是学习空间变换参数$\theta$,无论通过全连接层，还是卷积层，Localisation网络最后一层必须回归产生空间变换参数θ。
 
 -  **输入** 特征图 U ，其大小为 (H, W, C)
--  **输出** 空间变换参数$θ$（对于仿射变换来说，其大小为（6，））
+-  **输出** 空间变换参数θ（对于仿射变换来说，其大小为（6，））
 -  **结构** 全连接，卷积均可，记作$\theta = f_{loc}(U)$
   
 #### 2.2 Grid Generator
@@ -68,7 +70,7 @@
 ## 代码
 ### 3.1 使用Gluon 
 #### 3.1.1 STN结构示例
-```
+```python
 class STN(nn.HybridBlock):
 	##继承HybridBlock模块，可以方便的hybrid，将命令式编程转换为符号式提升性能但损失了一定的灵活性
     def __init__(self):
@@ -107,7 +109,7 @@ class STN(nn.HybridBlock):
 ```
 #### 3.1.2 主体网络
 
-```
+```python
 class Net(nn.HybridBlock):
     def __init__(self):
         super(Net, self).__init__()
@@ -135,7 +137,7 @@ class Net(nn.HybridBlock):
 ```
 ### 3.2 使用MxNet.symbol
 
-```
+```python
 def get_loc(data, attr={'lr_mult':'0.01'}):
     """
     the localisation network in stn, it will increase acc about more than 1%,
@@ -187,13 +189,13 @@ def get_symbol(num_classes=10, flag='training' ,add_stn=True, **kwargs):
 ### 3.3 注意
 &emsp;&emsp;对于Localisation学习的参数$\theta$可以初始化为[1,0,0,0,1,0]，相当于恒等映射，没有对输入图像做空间变换。可将Localisation的最后一层的w的初始化为0，b初始化为[1,0,0,0,1,0]
 
-```
+```python
 b = net.model[0].fc_loc[1].bias
 b.set_data(nd.array([1, 0, 0, 0, 1, 0]))
 ```
 ### 3.4 可视化
 
-```
+```python
 def visualize_stn():
     # 随机读取其中一个batch数据进行可视化
     for i,(data,_) in enumerate(test_data):
