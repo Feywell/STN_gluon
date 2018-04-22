@@ -10,13 +10,12 @@
 <p align="center"> 
 <img src="https://github.com/Feywell/STN_gluon/raw/master/mnist.png">
 </p>
-&emsp;&emsp;上述图片是将STN作为MNIST分类网络第一层的结果，我们注意到STN学会了如何更“健壮”地进行图像分类：通过放大和消除背景噪声，它已经“标准化”输入数据以提高分类效果。详细动画[here](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)
-    
-----------
-## 网络结构
+&emsp;&emsp;上述图片是将STN作为MNIST分类网络第一层的结果，我们注意到STN学会了如何更“健壮”地进行图像分类：通过放大和消除背景噪声，它已经“标准化”输入数据以提高分类效果。详细动画[here](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)  
+
+----------  
+## 网络结构 
 ### 特点
 &emsp;&emsp;论文作者提出STN 有三个重要的特性：
-
 - **模块化：** STN可以插入到现有深度学习网络结构的任意位置，且只需要较小的改动。
 - **可微分性：** STN 是一个可微分的结构，可以进行反向传播，整个网络可以端到端训练。
 -  **动态性：** 与对所有输入进行相同的pooling操作相比，STN对每一特征图输入采样，并主动学习空间变换。
@@ -25,14 +24,15 @@
 <img src="https://github.com/Feywell/STN_gluon/raw/master/structpng.png">
 </p>
 <div align="center">网络结构</div>
-&emsp;&emsp;如上图所示，STN由Localisation net （定位网络），Grid generator（网格生成器）和Sampler（采样器）三部分构成。
+&emsp;&emsp;如上图所示，STN由Localisation net （定位网络），Grid generator（网格生成器）和Sampler（采样器）三部分构成。    
+
 #### 2.1 Localisation Net
 &emsp;&emsp;Localisation 网络的目标是学习空间变换参数$θ$,无论通过全连接层，还是卷积层，Localisation网络最后一层必须回归产生空间变换参数$θ$。
 
 -  **输入** 特征图 U ，其大小为 (H, W, C)
 -  **输出** 空间变换参数$θ$（对于仿射变换来说，其大小为（6，））
 -  **结构** 全连接，卷积均可，记作$\theta = f_{loc}(U)$
-
+  
 #### 2.2 Grid Generator
 &emsp;&emsp;该层利用Localisation Net 输出的空间变换参数θ，将输入的特征图进行变换，以仿射变换为例，将输出特征图上某一位置$(x^{t}_{i},y^{t}_{i})$通过参数$\theta$映射到输入特征图上某一位置$(x^{s}_{i},y^{s}_{i})$，计算公式如下：
 <p align="center"> 
@@ -41,8 +41,10 @@
 &emsp;&emsp;网格参数恒等映射和应用仿射变换后结果如下：
 <p align="center"> 
 <img src="https://github.com/Feywell/STN_gluon/raw/master/%E6%A0%B7%E4%BE%8B.png">
-</p>
-#### 2.3 Sampler
+</p>  
+
+#### 2.3 Sampler    
+
 &emsp;&emsp;实际上$(x^s_i,y^s_i)$往往会落在原始输入特征图的几个像素点中间，因此需要利用双线性插值来计算出对应该点的灰度值。需要补充的是，文中在变换时用都是标准化坐标，即$x_i,y_i∈[−1,1]$。实际采样形式如下：
 <p align="center"> 
 <img src="https://github.com/Feywell/STN_gluon/raw/master/%E9%87%87%E6%A0%B7%E5%85%AC%E5%BC%8F.png">
@@ -216,7 +218,8 @@ def visualize_stn():
 ### 3.5 可视化结果  
 <p align="center"> 
 <img src="https://github.com/Feywell/STN_gluon/raw/master/compare.jpg">
-</p>
+</p>  
+
 ### 3.6 训练结果
 
 > Train Epoch: 1 [0/60000 (0%)]	Loss: 0.002750
