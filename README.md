@@ -1,18 +1,15 @@
-论文：[Spatial Transformer Networks](https://arxiv.org/pdf/1506.02025.pdf)
-演示：[google drive](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)
-博客：[kevinzakka](https://kevinzakka.github.io/2017/01/10/stn-part1/)
-代码：[自己实现的代码](https://github.com/Feywell/STN_gluon)
+论文：[Spatial Transformer Networks](https://arxiv.org/pdf/1506.02025.pdf)  
+演示：[google drive](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)  
+博客：[kevinzakka](https://kevinzakka.github.io/2017/01/10/stn-part1/)  
+代码：[自己实现的代码](https://github.com/Feywell/STN_gluon)  
 ————————————————————
-
-[TOC]
-
 ----------
 ## 摘要
 &emsp;&emsp;卷积神经网络在图像分类，目标检测等任务上显示了强大的特征提取能力，且CNN本身具有一定的位移、旋转、尺度不变性。然而，对于一些图像数据变形的情况，CNN并不能自适应地学习图像的变形情况。
 &emsp;&emsp;Spatial Transformer Networks （以下均简称STN）提供了一种可微分的网络结构，不需要关键点的标定，能够根据分类或者其它任务自适应地将数据进行空间变换和对齐（包括平移、缩放、旋转以及其它几何变换等）。
-<center>
-![MNIST 分类案例](https://img-blog.csdn.net/20180421215253490?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5MjQ0ODU1OTgz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-</center>
+<div align=center>
+![MNIST 分类案例](https://github.com/Feywell/STN_gluon/blob/master/mnist.png)
+</div>
 &emsp;&emsp;上述图片是将STN作为MNIST分类网络第一层的结果，我们注意到STN学会了如何更“健壮”地进行图像分类：通过放大和消除背景噪声，它已经“标准化”输入数据以提高分类效果。 详细动画[here](https://drive.google.com/file/d/0B1nQa_sA3W2iN3RQLXVFRkNXN0k/view)
 
 ----------
@@ -24,9 +21,9 @@
 - **可微分性：** STN 是一个可微分的结构，可以进行反向传播，整个网络可以端到端训练。
 -  **动态性：** 与对所有输入进行相同的pooling操作相比，STN对每一特征图输入采样，并主动学习空间变换。
 ### 结构
-<center>
-![结构](https://img-blog.csdn.net/20180421221610579?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2x5MjQ0ODU1OTgz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
-</center>
+<div align=center>
+![结构](https://github.com/Feywell/STN_gluon/blob/master/structpng.png)
+</div>
 <div align="center">网络结构</div>
 &emsp;&emsp;如上图所示，STN由Localisation net （定位网络），Grid generator（网格生成器）和Sampler（采样器）三部分构成。
 #### 2.1 Localisation Net
